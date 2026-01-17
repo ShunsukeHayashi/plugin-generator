@@ -1,0 +1,11 @@
+{
+  "name": "plugin-generator",
+  "description": "Claude Codeのプラグイン雛形を自動生成するツール",
+  "version": "1.0.0",
+  "author": {
+    "name": "ShunsukeHayashi"
+  },
+  "capabilities": [
+    "slashCommands"
+  ]
+}

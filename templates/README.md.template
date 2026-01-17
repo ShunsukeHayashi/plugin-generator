@@ -1,0 +1,21 @@
+# {{PLUGIN_NAME}}
+
+## 概要
+
+{{PLUGIN_NAME}} プラグインの説明。
+
+## インストール
+
+```bash
+claude --plugin-dir ./{{PLUGIN_NAME}}
+```
+
+## 使い方
+
+### コマンド
+
+- `/{{PLUGIN_NAME}}:hello` - 挨拶メッセージを表示
+
+## 開発
+
+プラグインの開発方法や拡張方法をここに記述してください。
