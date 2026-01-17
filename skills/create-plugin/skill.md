@@ -1,4 +1,5 @@
 ---
+name: create-plugin
 description: 新しいClaude Codeプラグインの雛形を生成する
 ---
 
