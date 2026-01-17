@@ -1,9 +1,10 @@
 ---
-name: create-plugin
 description: 新しいClaude Codeプラグインの雛形を生成する
+argument-hint: <plugin-name>
+allowed-tools: [Bash, Write, Edit, Read]
 ---
 
-# Create Plugin Skill
+# Create Plugin
 
 ユーザーが `/create-plugin <plugin-name>` コマンドを実行した際、以下の手順でプラグイン雛形を生成してください。
 
@@ -74,7 +75,7 @@ description: ユーザーに友好的なメッセージで挨拶する
 ## インストール
 
 ```bash
-claude --plugin-dir ./<plugin-name>
+claude plugin install ./
 ```
 
 ## 使い方
@@ -126,7 +127,7 @@ npm-debug.log*
 1. cd <plugin-name>
 2. plugin.json を編集してプラグイン情報をカスタマイズ
 3. commands/ に新しいコマンドを追加
-4. claude --plugin-dir ./<plugin-name> でテスト
+4. claude plugin install ./ でインストール
 
 💡 ヒント:
 - commands/ディレクトリに .md ファイルを追加するだけで新しいコマンドが作成できます

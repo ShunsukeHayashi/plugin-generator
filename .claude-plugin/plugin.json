@@ -4,10 +4,5 @@
   "version": "1.0.0",
   "author": {
     "name": "ShunsukeHayashi"
-  },
-  "slashCommands": {
-    "create-plugin": {
-      "description": "新しいClaude Codeプラグインの雛形を生成する"
-    }
   }
 }
