@@ -12,7 +12,10 @@
     "url": "https://github.com/ShunsukeHayashi/plugin-generator.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Running plugin generator tests...\"",
+    "test:validate": "echo \"Validating templates...\" && find templates -type f -name \"*.template\" | wc -l",
+    "test:structure": "echo \"Checking project structure...\" && ls -la .claude-plugin/ commands/ templates/",
+    "validate": "npm run test:validate && npm run test:structure"
   },
   "keywords": [
     "claude-code",

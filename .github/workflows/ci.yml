@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Validate Project Structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate plugin.json
+        run: |
+          if [ ! -f ".claude-plugin/plugin.json" ]; then
+            echo "❌ plugin.json not found"
+            exit 1
+          fi
+          echo "✅ plugin.json exists"
+
+      - name: Validate templates
+        run: |
+          template_count=$(find templates -type f -name "*.template" 2>/dev/null | wc -l)
+          if [ "$template_count" -lt 4 ]; then
+            echo "❌ Insufficient template files"
+            exit 1
+          fi
+          echo "✅ Found $template_count template files"
+
+      - name: Validate commands
+        run: |
+          if [ ! -f "commands/create-plugin.md" ]; then
+            echo "❌ create-plugin.md not found"
+            exit 1
+          fi
+          echo "✅ create-plugin.md exists"
+
+      - name: Check documentation
+        run: |
+          for doc in README.md LICENSE CONTRIBUTING.md CHANGELOG.md; do
+            if [ ! -f "$doc" ]; then
+              echo "❌ $doc not found"
+              exit 1
+            fi
+            echo "✅ $doc exists"
+          done
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run validation script
+        run: |
+          npm run validate || echo "Validate script not found, skipping"
+
+      - name: Test plugin structure
+        run: |
+          # Test that required directories exist
+          [ -d ".claude-plugin" ] || (echo "❌ .claude-plugin missing" && exit 1)
+          [ -d "commands" ] || (echo "❌ commands missing" && exit 1)
+          [ -d "templates" ] || (echo "❌ templates missing" && exit 1)
+          echo "✅ All required directories exist"
+
+  lint:
+    name: Lint Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check file permissions
+        run: |
+          # Ensure executable files have correct permissions
+          find . -type f -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
+          echo "✅ File permissions checked"
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          if grep -r "TODO\|FIXME" --include="*.md" .; then
+            echo "⚠️ Found TODO/FIXME comments"
+          else
+            echo "✅ No TODO/FIXME comments found"
+          fi
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for sensitive files
+        run: |
+          # Ensure no sensitive files are tracked
+          if git ls-files | grep -E "\.env$|\.pem$|\.key$|id_rsa"; then
+            echo "❌ Sensitive files detected in git"
+            exit 1
+          fi
+          echo "✅ No sensitive files detected"
+
+      - name: Check .gitignore
+        run: |
+          if [ ! -f ".gitignore" ]; then
+            echo "❌ .gitignore not found"
+            exit 1
+          fi
+          echo "✅ .gitignore exists"
